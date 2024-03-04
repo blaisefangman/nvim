@@ -38,6 +38,7 @@ lazy.setup({
 	{'nvim-lualine/lualine.nvim'},
 	{'kyazdani42/nvim-web-devicons'},
 	{'nvim-treesitter/nvim-treesitter'},
+	{'numToStr/Comment.nvim'},
 	{'williamboman/mason.nvim'},
 	{'williamboman/mason-lspconfig.nvim'},
 	{'neovim/nvim-lspconfig'},
@@ -56,6 +57,8 @@ lazy.setup({
 		}
 	},
 })
+
+require('Comment').setup()
 
 require('lualine').setup({
 	options = {

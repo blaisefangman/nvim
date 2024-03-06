@@ -82,6 +82,7 @@ require('nvim-treesitter.configs').setup({
 		'gitattributes',
 		'git_rebase',
 		'git_config',
+		'vimdoc',
 	},
 })
 
@@ -165,9 +166,18 @@ require('mason-lspconfig').setup({
 })
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require('lspconfig').gdscript.setup {
-	capabilities = capabilities
-}
+
+if vim.fn.has('win32') then
+	local port = os.getenv('GDScript_Port') or '6005'
+	require('lspconfig').gdscript.setup {
+		cmd = { 'ncat', '127.0.0.1', port },
+		capabilities = capabilities,
+	}
+else
+	require('lspconfig').gdscript.setup {
+		capabilities = capabilities
+	}
+end
 
 require('lspconfig').lua_ls.setup {
 	capabilities = capabilities
@@ -184,6 +194,16 @@ require('lspconfig').pyright.setup {
 require('lspconfig').rust_analyzer.setup {
 	capabilities = capabilities
 }
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {border = 'rounded'}
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help,
+  {border = 'rounded'}
+)
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
